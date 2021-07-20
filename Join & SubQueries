@@ -1,0 +1,11 @@
+1. Find details of all employees who have a higher salary than the average salary.
+			select * from hr.employees where salary > 
+			(
+					select avg(salary) from hr.employees
+			);
+			
+2. Find the count of employees who have a lower salary than the average salary.
+			select count(EMPLOYEE_ID) from hr.employees where salary < 
+			(	
+					select avg(salary) from hr.employees
+			);
