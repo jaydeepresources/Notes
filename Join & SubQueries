@@ -1,3 +1,6 @@
+----------Sub Queries----------
+
+
 1. Find details of all employees who have a higher salary than the average salary.
 			select * from hr.employees where salary > 
 			(
@@ -9,3 +12,10 @@
 			(	
 					select avg(salary) from hr.employees
 			);
+
+----------Joins----------
+
+1. Show Employee details along with the Department Name
+
+			select EMPLOYEE_ID, FIRST_NAME, SALARY, e.DEPARTMENT_ID, DEPARTMENT_NAME
+			from hr.employees e JOIN hr.departments d ON e.DEPARTMENT_ID = d.DEPARTMENT_ID;
