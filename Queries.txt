@@ -1,0 +1,73 @@
+Mongo DB Queries
+
+
+1.	view existing dbs
+> db
+
+2.	select a db
+> use test
+
+3.	create collection
+> db.createCollection(‘posts’) 
+
+4.	insert a document
+> db.posts.insertOne({title:’title 1’,body:’body’})
+
+5.	insert multiple documents
+> db.posts.insertMany([{},{},{}])
+
+6.	find all documents
+> db.posts.find()
+
+7.	remove a document
+> db.posts.remove({username:’John’}) // deprecated
+> db.posts.deleteOne({username:’John’}) // deletes 1st match
+> db.posts.deleteMany({username:’John’})// deletes all matches
+> db.posts.deleteOneAndFindOne({username:’John’}) // returns the deleted document after having deleted it 
+
+8.	update a document
+> db.users.updateOne({"_id" : ObjectId("5c3efbf7311f29a189442137")},
+{$set:{username:"Moriah"}}) // sets comma separated specific fields
+> replaceOne({"_id" : ObjectId("5c3efbf7311f29a189442137")}, { "newField" : 4}) // Replace all other fields and adds this field
+> db.users.updateMany({"_id" : ObjectId("5c3efbf7311f29a189442137")},
+{$set:{location:"US"}}) // sets comma separated specific fields
+> db.users.updateMany({},{$set:{location:"US"}}); // adds a new field if not found, to all documents optional parameters are: multi and upsert
+
+9.	Query Operators in finding documents
+> db.users.find({username:{$eq:'Moriah'}}) // eq: equals
+> db.users.find({username:'Moriah'})
+> $gt: greater
+> $gte: greater or equal
+> $lt: less than
+> $lte: less than or equal
+> $ne: not equal
+> $in: find in specified array values
+db.users.find ({username: { $in: ['Moriah','Leopoldo_Corkery']}})
+> $nin: not in specified array values
+> db.users.find( { location: { $ne: ‘US’, $exists: true } } )
+// $exists checks if the field exists
+> Logical Operators: $and, $or, $nor, $not
+
+> db.items.find({ $and: [ { type: { $eq: 'fruit' } }, { price: { $gt: 10 } }] })
+
+> db.some_Collection.find( {
+    $and : [
+        { $or : [ { price : 0.99 }, { price : 1.99 } ] },
+        { $or : [ { sale : true }, { qty : { $lt : 20 } } ] }
+    ]
+} ) // combining multiple operators
+> db.some_Collection.find( { price: { $not: { $gt: 1.99 } } } )
+// not same as lte: doesn’t check exists
+> db.some_Collection.find( { $nor: [ { price: 1.99 }, { sale: true } ]  } )
+// combination of exists, not equal to
+
+10.	Aggregtion Pipeline 
+> db.users.aggregate([{$match:{location: 'US'}}])
+// isn’t different than find() but…
+> db.users.aggregate( { $group: { _id: '$location', total: {$sum : 1} } }) 
+// equal to group by in sql
+> db.users.aggregate([{$match:{location: 'US'}},
+{$group: {_id:'$location',total:{$sum:1}}}])
+
+
+
